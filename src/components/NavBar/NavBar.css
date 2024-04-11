@@ -1,0 +1,47 @@
+.navbar {
+  background-color: black;
+  padding: 10px;
+  font-family: "Inter", sans-serif;
+  border-bottom: 1px solid #ddd;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.3s, border 0.3s, box-shadow 0.3s;
+}
+
+.navbar.scrolled {
+  background-color: black;
+  border: none;
+  box-shadow: none;
+}
+
+.container {
+  display: flex;
+}
+
+.navbar-brand {
+  margin-left: 10px;
+  font-size: 15px;
+  font-weight: bold;
+  color: white;
+}
+
+.nav-link {
+  margin: 0 8px !important;
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  font-size: 16px !important;
+  font-weight: 500 !important;
+  color: black;
+}
+
+.nav-link:hover {
+  color: #007bff !important;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.rounded-circle {
+  border-radius: 50%;
+}
