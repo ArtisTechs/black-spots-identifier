@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import {
   faArrowLeft,
   faArrowUpFromBracket,
@@ -13,6 +13,7 @@ import "./SideMenu.css";
 const SideMenu = () => {
   const [isMinimized, setIsMinimized] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
+  const location = useLocation();
 
   const toggleMenu = () => {
     setIsMinimized(!isMinimized);
@@ -21,6 +22,24 @@ const SideMenu = () => {
   const handleItemClick = (itemName) => {
     setSelectedItem(itemName);
   };
+
+  useEffect(() => {
+    const pathname = location.pathname;
+    switch (pathname) {
+      case "/map":
+        setSelectedItem("map");
+        break;
+      case "/statistics":
+        setSelectedItem("statistics");
+        break;
+      case "/upload":
+        setSelectedItem("upload");
+        break;
+      default:
+        setSelectedItem(null);
+        break;
+    }
+  }, [location.pathname]);
 
   return (
     <div className={`side-menu ${isMinimized ? "minimized" : ""}`}>

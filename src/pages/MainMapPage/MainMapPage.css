@@ -1,0 +1,16 @@
+.main-container {
+  display: flex;
+  height: 95vh;
+  width: 100%;
+  justify-content: center !important;
+  align-items: center !important;
+}
+.map-container {
+  overflow: hidden;
+  display: flex;
+  border-radius: 10px;
+  border: 2px solid black;
+  width: 90%;
+  height: 80%;
+  box-shadow: 0 10px 10px rgba(0, 0, 0, 0.2);
+}

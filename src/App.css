@@ -13,6 +13,16 @@
 }
 
 .main-page {
-  height: 100vh;
+  height: 95vh;
   margin-top: 2rem;
+  display: flex;
+}
+
+.side-menu-page {
+  height: 100%;
+}
+
+.page{
+  height: 95vh;
+  width: 100%;
 }
