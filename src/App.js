@@ -1,5 +1,10 @@
 import React from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
 import "./App.css";
 import { NavBar } from "./components/NavBar/NavBar";
 import SideMenu from "./components/SideMenu/SideMenu";
@@ -20,9 +25,11 @@ function App() {
           </div>
           <div className="page">
             <Routes>
+              <Route path="/" element={<Navigate replace to="/map" />} />
               <Route path="/map" element={<MainMapPage />} />
               <Route path="/statistics" element={<StatisticsPage />} />
               <Route path="/upload" element={<FileUplaodPage />} />
+              <Route path="*" element={<Navigate to="/map" replace />} />
             </Routes>
           </div>
         </div>

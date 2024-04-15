@@ -1,0 +1,30 @@
+.main-container {
+  display: flex;
+  height: 95vh;
+  width: 100%;
+  flex-direction: column;
+  justify-content: center !important;
+  align-items: center !important;
+}
+.stat-container {
+  background-color: white;
+  overflow: hidden;
+  display: flex;
+  flex-wrap: wrap;
+  border: 2px solid black;
+  border-radius: 10px;
+  width: 90%;
+  height: 80%;
+  box-shadow: 0 10px 10px rgba(0, 0, 0, 0.2);
+  overflow-y: auto;
+  position: relative;
+}
+
+.stat-container canvas {
+  margin-top: 5rem;
+}
+
+.header {
+  padding: 0 1rem; /* Add padding to match the rest of the container */
+  position: fixed;
+}
