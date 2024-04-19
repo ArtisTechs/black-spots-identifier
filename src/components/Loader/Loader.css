@@ -1,0 +1,17 @@
+.loader-container {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.535);
+  cursor: default;
+}
+
+.loading-icon {
+  color: white;
+}
+
+.loader-container h1 {
+    margin-left: 1rem;
+    color: white;
+}

@@ -1,0 +1,61 @@
+.main-container-file-upload {
+  display: flex;
+  flex-direction: column;
+  justify-content: start !important;
+  align-items: start !important;
+  height: 95vh;
+  width: 100%;
+}
+
+.choose-file-page h1 {
+  font-size: large;
+}
+
+.choose-file-page {
+  margin: 3rem;
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+}
+
+.card-container {
+  display: flex;
+}
+
+.card {
+  background-color: white;
+  height: 300px;
+  width: 200px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border-radius: 20px;
+  box-shadow: 0 10px 10px rgba(0, 0, 0, 0.2);
+  margin-right: 3rem;
+  margin-top: 1rem;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
+}
+
+.card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 15px 20px rgba(0, 0, 0, 0.25);
+  font-weight: bold;
+}
+
+.card:active {
+  transform: translateY(-1px);
+  box-shadow: 0 10px 15px rgba(0, 0, 0, 0.3);
+}
+
+.label-icon-card {
+  margin-bottom: 3rem;
+  height: 50px;
+  width: 50px;
+}
+
+.drag-and-drop-page {
+  margin: 3rem;
+  width: 90%;
+}

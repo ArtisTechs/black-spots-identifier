@@ -1,31 +1,33 @@
 import React, { useEffect, useRef, useState } from "react";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
+import "leaflet-fullscreen";
+import "leaflet-fullscreen/dist/leaflet.fullscreen.css";
 import "leaflet.heat";
-import markerPin from "../../assets/icons/pin.png";
+// import markerPin from "../../assets/icons/pin.png";
 import "./MainMapPage.css";
 
 const MainMapPage = () => {
   const [map, setMap] = useState(null);
-  const [showMarkers, setShowMarkers] = useState(true); // State to track marker visibility
+  // const [showMarkers, setShowMarkers] = useState(true); 
   const mapContainerRef = useRef(null);
-  const markersRef = useRef([]); // Ref to store marker instances
+  // const markersRef = useRef([]);
 
   useEffect(() => {
     const leafletMap = L.map(mapContainerRef.current).setView(
       [15.049528, 120.69425],
       13
     );
-    L.tileLayer("https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png").addTo(
+    L.tileLayer("http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png").addTo(
       leafletMap
     );
 
-    const customIcon = L.icon({
+    /*const customIcon = L.icon({
       iconUrl: markerPin,
-      iconSize: [30, 45], // Corrected iconSize
+      iconSize: [30, 45],
       iconAnchor: [15, 45],
       popupAnchor: [0, -45],
-    });
+    });*/
 
     const data = [
       {
@@ -206,23 +208,36 @@ const MainMapPage = () => {
 
     const allData = [...data, ...newData];
 
+    // Create heatmap circles
+    const circles = allData.map((item) =>
+      L.circle([item.latitude, item.longitude], {
+        radius: 25,
+        stroke: false,
+      })
+    );
+
     const heatmapData = allData.map((item) => [item.latitude, item.longitude]);
 
     const heat = L.heatLayer(heatmapData, {
       radius: 25,
-      gradient: { 0.1: "red", 0.6: "red", 1.0: "orange" },
+      gradient: {
+        0.1: "blue",
+        0.2: "cyan",
+        0.3: "lime",
+        0.4: "yellow",
+        0.5: "red",
+      },
     }).addTo(leafletMap);
 
-    // Store markers in the ref
-    const markers = allData.map((item) =>
-      L.marker([item.latitude, item.longitude], { icon: customIcon })
-    );
-    markersRef.current = markers;
-
     // Show or hide markers based on showMarkers state
-    if (showMarkers) {
-      markers.forEach((marker) => marker.addTo(leafletMap));
-    }
+    // if (showMarkers) {
+    //   markers.forEach((marker) => marker.addTo(leafletMap));
+    // }
+
+    // Add circles to the map
+    circles.forEach((circle) => circle.addTo(leafletMap));
+
+    leafletMap.addControl(new L.Control.Fullscreen());
 
     setMap(leafletMap);
 
@@ -232,22 +247,19 @@ const MainMapPage = () => {
   }, []);
 
   // Function to toggle marker visibility
-  const toggleMarkers = () => {
-    setShowMarkers(!showMarkers);
-    markersRef.current.forEach((marker) => {
-      if (showMarkers) {
-        map.removeLayer(marker);
-      } else {
-        marker.addTo(map);
-      }
-    });
-  };
+  // const toggleMarkers = () => {
+  //   setShowMarkers(!showMarkers);
+  //   markersRef.current.forEach((marker) => {
+  //     if (showMarkers) {
+  //       map.removeLayer(marker);
+  //     } else {
+  //       marker.addTo(map);
+  //     }
+  //   });
+  // };
 
   return (
     <div className="main-container">
-      <button onClick={toggleMarkers}>
-        {showMarkers ? "Hide Markers" : "Show Markers"}
-      </button>
       <div className="map-container">
         <div ref={mapContainerRef} style={{ height: "100%", width: "100%" }} />
       </div>

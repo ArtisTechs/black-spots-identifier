@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   BrowserRouter as Router,
   Routes,
@@ -10,12 +10,20 @@ import { NavBar } from "./components/NavBar/NavBar";
 import SideMenu from "./components/SideMenu/SideMenu";
 import MainMapPage from "./pages/MainMapPage/MainMapPage";
 import StatisticsPage from "./pages/StatisticsPage/StatisticsPage";
-import FileUplaodPage from "./pages/FileUploadPage/FileUplaodPage";
+import FileUploadPage from "./pages/FileUploadPage/FileUplaodPage";
+import Loader from "./components/Loader/Loader";
 
 function App() {
+  const [isLoading, setIsLoading] = useState(false);
+
   return (
     <Router>
       <div className="app">
+        {isLoading && (
+          <div className="loading-page">
+            <Loader />
+          </div>
+        )}
         <div className="nav-bar">
           <NavBar />
         </div>
@@ -28,7 +36,10 @@ function App() {
               <Route path="/" element={<Navigate replace to="/map" />} />
               <Route path="/map" element={<MainMapPage />} />
               <Route path="/statistics" element={<StatisticsPage />} />
-              <Route path="/upload" element={<FileUplaodPage />} />
+              <Route
+                path="/upload"
+                element={<FileUploadPage setIsLoading={setIsLoading} />}
+              />
               <Route path="*" element={<Navigate to="/map" replace />} />
             </Routes>
           </div>
