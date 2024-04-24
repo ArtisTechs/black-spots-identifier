@@ -6,6 +6,8 @@ import "./StatisticsPage.css";
 const StatisticsPage = () => {
   const chartContainerRef = useRef(null);
   const [chartInstance, setChartInstance] = useState(null);
+  const [earliestYear, setEarliestYear] = useState(Number.MAX_SAFE_INTEGER);
+  const [latestYear, setLatestYear] = useState(Number.MIN_SAFE_INTEGER);
 
   useEffect(() => {
     // Register the necessary controllers and scales
@@ -13,24 +15,55 @@ const StatisticsPage = () => {
 
     const ctx = chartContainerRef.current.getContext("2d");
 
-    // Sample data for demonstration
-    const labels = Array.from({ length: 30 }, (_, i) => `Barangay ${i + 1}`);
+    const uploadedData = localStorage.getItem("uploadedExcelData");
+    const data = uploadedData ? JSON.parse(uploadedData) : [];
 
-    const data = {
-      labels: labels,
+    // Step 1: Combine data based on barangay streets
+    const combinedData = data.reduce((acc, current) => {
+      const existing = acc.find(
+        (item) => item.barangayStreet === current.barangayStreet
+      );
+
+      if (existing) {
+        existing.totalAccidents++;
+      } else {
+        acc.push({
+          barangayStreet: current.barangayStreet,
+          totalAccidents: 1,
+        });
+      }
+      return acc;
+    }, []);
+
+    let tempEarliestYear = Number.MAX_SAFE_INTEGER;
+    let tempLatestYear = Number.MIN_SAFE_INTEGER;
+
+    data.forEach((item) => {
+      const year = new Date(item.dateCommitted).getFullYear();
+      if (year < tempEarliestYear) {
+        tempEarliestYear = year;
+      }
+      if (year > tempLatestYear) {
+        tempLatestYear = year;
+      }
+    });
+
+    setEarliestYear(tempEarliestYear);
+    setLatestYear(tempLatestYear);
+
+    // Step 2: Prepare data for chart
+    const chartData = {
+      labels: combinedData.map((item) => item.barangayStreet),
       datasets: [
         {
-          label: "Accidents",
-          backgroundColor: "#d00000",
-          data: Array.from(
-            { length: 100 },
-            () => Math.floor(Math.random() * 100) + 1
-          ),
+          label: "Number of Accidents",
+          data: combinedData.map((item) => item.totalAccidents),
+          backgroundColor: "rgba(255, 0, 0, 1)",
+          borderColor: "rgba(255, 0, 0, 1)",
+          borderWidth: 1,
         },
       ],
     };
-
-
 
     // Destroy the existing chart instance if it exists
     if (chartInstance) {
@@ -40,7 +73,7 @@ const StatisticsPage = () => {
     // Create the new chart instance
     const newChartInstance = new Chart(ctx, {
       type: "bar",
-      data: data,
+      data: chartData,
       options: {
         indexAxis: "y",
         responsive: true,
@@ -67,9 +100,12 @@ const StatisticsPage = () => {
     <div className="main-container">
       <div className="stat-container">
         <div className="header">
-          <h3>Number of accidents per Barangays over the past 5 years.</h3>
+          <h3>
+            Number of accidents per Barangays from {earliestYear} to{" "}
+            {latestYear}.
+          </h3>
         </div>
-        <canvas ref={chartContainerRef} style={{ height: "100vh" }}></canvas>
+        <canvas ref={chartContainerRef} className="chart-canvas" style={{ height: "100vh" }}></canvas>
       </div>
     </div>
   );

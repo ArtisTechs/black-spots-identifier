@@ -2,21 +2,37 @@ import React, { useState } from "react";
 import { useDropzone } from "react-dropzone";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  faFileExcel,
-  faTimes,
   faAngleLeft,
   faFile,
   faTimesCircle,
   faCloudArrowUp,
 } from "@fortawesome/free-solid-svg-icons";
+import { toast } from "react-toastify";
 import "./DragAndDrop.css";
 
-const DragAndDrop = ({ dataType, goBack, setIsLoading }) => {
+const DragAndDrop = ({ dataType, goBack, onFileUpload }) => {
   const [selectedFile, setSelectedFile] = useState(null);
 
   const onDrop = (acceptedFiles) => {
-    // Handle dropped files
-    setSelectedFile(acceptedFiles[0]);
+    if (acceptedFiles.length === 0) {
+      toast.error("Please select a valid Excel file.", {
+        position: "top-center",
+      });
+    } else {
+      const file = acceptedFiles[0];
+
+      if (
+        file.type !== "application/vnd.ms-excel" &&
+        file.type !==
+          "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+      ) {
+        toast.error("Please select a valid Excel file.", {
+          position: "top-right",
+        });
+      } else {
+        setSelectedFile(file);
+      }
+    }
   };
 
   const clearFile = () => {
@@ -24,20 +40,14 @@ const DragAndDrop = ({ dataType, goBack, setIsLoading }) => {
   };
 
   const uploadFile = () => {
-    console.log("Uploading file:", selectedFile.name);
-
-    // Set loading state to true
-    setIsLoading(true);
-
-    // Simulate a delay for demonstration purposes
-    setTimeout(() => {
-      // Set loading state to false after 2 seconds
-      setIsLoading(false);
-      goBack(false);
-    }, 2000);
+    if (selectedFile) {
+      onFileUpload(selectedFile);
+    }
   };
 
-  const { getRootProps, getInputProps } = useDropzone({ onDrop });
+  const { getRootProps, getInputProps } = useDropzone({
+    onDrop,
+  });
 
   return (
     <div className="container-drag-drop">
@@ -46,7 +56,7 @@ const DragAndDrop = ({ dataType, goBack, setIsLoading }) => {
           <FontAwesomeIcon className="back-button-icon" icon={faAngleLeft} />
         </button>
         {dataType === "map" ? (
-          <h1>Upload an Excel file containing the data for Map.</h1>
+          <h1>Please upload a file in Excel format containing the data.</h1>
         ) : (
           <h1>Upload an Excel file containing the data for Statistics.</h1>
         )}

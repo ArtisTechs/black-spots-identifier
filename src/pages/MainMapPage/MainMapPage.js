@@ -4,14 +4,12 @@ import "leaflet/dist/leaflet.css";
 import "leaflet-fullscreen";
 import "leaflet-fullscreen/dist/leaflet.fullscreen.css";
 import "leaflet.heat";
-// import markerPin from "../../assets/icons/pin.png";
 import "./MainMapPage.css";
+import * as geolib from "geolib";
 
 const MainMapPage = () => {
   const [map, setMap] = useState(null);
-  // const [showMarkers, setShowMarkers] = useState(true); 
   const mapContainerRef = useRef(null);
-  // const markersRef = useRef([]);
 
   useEffect(() => {
     const leafletMap = L.map(mapContainerRef.current).setView(
@@ -22,204 +20,168 @@ const MainMapPage = () => {
       leafletMap
     );
 
-    /*const customIcon = L.icon({
-      iconUrl: markerPin,
-      iconSize: [30, 45],
-      iconAnchor: [15, 45],
-      popupAnchor: [0, -45],
-    });*/
+    const uploadedData = localStorage.getItem("uploadedExcelData");
+    const data = uploadedData ? JSON.parse(uploadedData) : [];
 
-    const data = [
-      {
-        date: "2023-01-05",
-        time: "16:30:00",
-        latitude: 15.039543,
-        longitude: 120.681084,
-        barangay: "Dolores",
-        vehicleType: "CAR",
-        vehicleModel: "MITSUBISHI",
-      },
-      {
-        date: "2023-01-05",
-        time: "10:13:00",
-        latitude: 15.043024,
-        longitude: 120.686966,
-        barangay: "Dolores",
-        vehicleType: "WAGON",
-        vehicleModel: "TOYOTA",
-      },
-      {
-        date: "2023-01-12",
-        time: "15:00:00",
-        latitude: 15.020808,
-        longitude: 120.676575,
-        barangay: "San Juan",
-        vehicleType: "VAN",
-        vehicleModel: "TOYOTA",
-      },
-      {
-        date: "2023-01-15",
-        time: "23:20:00",
-        latitude: 15.021223,
-        longitude: 120.676537,
-        barangay: "San Juan",
-        vehicleType: "CAR",
-        vehicleModel: "TOYOTA",
-      },
-      {
-        date: "2023-01-16",
-        time: "11:30:00",
-        latitude: 15.043314,
-        longitude: 120.686493,
-        barangay: "Dolores",
-        vehicleType: "WAGON",
-        vehicleModel: "TOYOTA",
-      },
-      {
-        date: "2023-01-16",
-        time: "16:00:00",
-        latitude: 15.040164,
-        longitude: 120.699539,
-        barangay: "San Jose",
-        vehicleType: "WAGON",
-        vehicleModel: "HYUNDAI",
-      },
-    ];
+    // Step 1: Combine nearby data into the center based on its coordinates
+    const combinedData = data.reduce((acc, current) => {
+      // Check if the current location is close to an existing location
+      const existing = acc.find((item) =>
+        geolib.isPointWithinRadius(
+          { latitude: item.center.latitude, longitude: item.center.longitude },
+          {
+            latitude: parseFloat(current.latitude),
+            longitude: parseFloat(current.longitude),
+          },
+          120
+        )
+      );
 
-    const newData = [
-      {
-        date: "2023-07-31",
-        time: "13:45:00",
-        latitude: 15.04377,
-        longitude: 120.688698,
-        barangay: "San Jose",
-        vehicleType: "TRUCK",
-        vehicleModel: "n/a",
-      },
-      {
-        date: "2023-07-31",
-        time: "15:10:00",
-        latitude: 15.041242,
-        longitude: 120.685249,
-        barangay: "Dolores",
-        vehicleType: "WAGON",
-        vehicleModel: "n/a",
-      },
-      {
-        date: "2023-08-05",
-        time: "15:00:00",
-        latitude: 15.044039,
-        longitude: 120.68795,
-        barangay: "Dolores",
-        vehicleType: "TRUCK",
-        vehicleModel: "HINO",
-      },
-      {
-        date: "2023-08-05",
-        time: "22:00:00",
-        latitude: 15.02143,
-        longitude: 120.677223,
-        barangay: "San Juan",
-        vehicleType: "TRUCK",
-        vehicleModel: "n/a",
-      },
-      {
-        date: "2023-08-07",
-        time: "14:50:00",
-        latitude: 15.037823,
-        longitude: 120.679199,
-        barangay: "Dolores",
-        vehicleType: "CAR",
-        vehicleModel: "n/a",
-      },
-      {
-        date: "2023-08-08",
-        time: "10:15:00",
-        latitude: 15.042361,
-        longitude: 120.701576,
-        barangay: "San Jose",
-        vehicleType: "WAGON",
-        vehicleModel: "n/a",
-      },
-      {
-        date: "2023-08-08",
-        time: "12:20:00",
-        latitude: 15.024062,
-        longitude: 120.671707,
-        barangay: "Dolores",
-        vehicleType: "VAN",
-        vehicleModel: "n/a",
-      },
-      {
-        date: "2023-08-08",
-        time: "12:30:00",
-        latitude: 15.0263,
-        longitude: 120.669647,
-        barangay: "Magliman",
-        vehicleType: "WAGON",
-        vehicleModel: "n/a",
-      },
-      {
-        date: "2023-08-08",
-        time: "11:30:00",
-        latitude: 15.024974,
-        longitude: 120.670723,
-        barangay: "Magliman",
-        vehicleType: "CAR",
-        vehicleModel: "n/a",
-      },
-      {
-        date: "2023-08-08",
-        time: "17:30:00",
-        latitude: 15.04176,
-        longitude: 120.684235,
-        barangay: "Dolores",
-        vehicleType: "TRUCK",
-        vehicleModel: "n/a",
-      },
-      {
-        date: "2023-08-08",
-        time: "18:30:00",
-        latitude: 15.046215,
-        longitude: 120.692474,
-        barangay: "San Jose",
-        vehicleType: "WAGON",
-        vehicleModel: "n/a",
-      },
-      {
-        date: "2023-08-16",
-        time: "14:20:00",
-        latitude: 15.080818,
-        longitude: 120.640617,
-        barangay: "Sindalan",
-        vehicleType: "CAR",
-        vehicleModel: "HONDA",
-      },
-      {
-        date: "2023-08-19",
-        time: "03:00:00",
-        latitude: 15.040579,
-        longitude: 120.699837,
-        barangay: "San Jose",
-        vehicleType: "TRUCK",
-        vehicleModel: "HINO",
-      },
-    ];
+      if (existing) {
+        // Increment the total number of accidents at this location
+        existing.totalData++;
 
-    const allData = [...data, ...newData];
+        // Update the latest date and time of the accident
+        existing.latestDateCommitted = current.dateCommitted;
+        existing.latestTimeCommitted = current.timeCommitted;
 
-    // Create heatmap circles
-    const circles = allData.map((item) =>
-      L.circle([item.latitude, item.longitude], {
-        radius: 25,
-        stroke: false,
-      })
-    );
+        // Add the barangay street if it's not already included
+        if (!existing.barangayStreets.includes(current.barangayStreet)) {
+          existing.barangayStreets.push(current.barangayStreet);
+        }
 
-    const heatmapData = allData.map((item) => [item.latitude, item.longitude]);
+        // Update typeOfVehicles counts if the type is not 'n/a'
+        if (current.typeOfVehicle !== "n/a") {
+          if (existing.typeOfVehicles[current.typeOfVehicle]) {
+            existing.typeOfVehicles[current.typeOfVehicle]++;
+          } else {
+            existing.typeOfVehicles[current.typeOfVehicle] = 1;
+          }
+        }
+
+        // Update vehicleModels counts if the model is not 'n/a'
+        if (current.vehicleModel !== "n/a") {
+          if (existing.vehicleModels[current.vehicleModel]) {
+            existing.vehicleModels[current.vehicleModel]++;
+          } else {
+            existing.vehicleModels[current.vehicleModel] = 1;
+          }
+        }
+
+        // Get top 3 typeOfVehicles excluding 'n/a'
+        existing.topTypeOfVehicles = Object.entries(existing.typeOfVehicles)
+          .filter(([type]) => type !== "n/a")
+          .sort(([, a], [, b]) => b - a)
+          .slice(0, 3)
+          .map(([type]) => type);
+
+        // Get top 3 vehicleModels excluding 'n/a'
+        existing.topVehicleModels = Object.entries(existing.vehicleModels)
+          .filter(([model]) => model !== "n/a")
+          .sort(([, a], [, b]) => b - a)
+          .slice(0, 3)
+          .map(([model]) => model);
+      } else {
+        // Create a new entry for this location if it doesn't exist
+        acc.push({
+          center: {
+            latitude: parseFloat(current.latitude),
+            longitude: parseFloat(current.longitude),
+          },
+          totalData: 1,
+          latestDateCommitted: current.dateCommitted,
+          latestTimeCommitted: current.timeCommitted,
+          barangayStreets: [current.barangayStreet],
+          typeOfVehicles:
+            current.typeOfVehicle !== "n/a"
+              ? { [current.typeOfVehicle]: 1 }
+              : {},
+          vehicleModels:
+            current.vehicleModel !== "n/a" ? { [current.vehicleModel]: 1 } : {},
+          topTypeOfVehicles:
+            current.typeOfVehicle !== "n/a" ? [current.typeOfVehicle] : [],
+          topVehicleModels:
+            current.vehicleModel !== "n/a" ? [current.vehicleModel] : [],
+        });
+      }
+      return acc;
+    }, []);
+
+    const circles = Array.isArray(combinedData)
+      ? combinedData
+          .filter(
+            (item) =>
+              isValidCoordinate(item.center.latitude) &&
+              isValidCoordinate(item.center.longitude)
+          )
+          .map((item) => {
+            // Calculate the radius based on the total number of accidents
+            const radius =
+              item.totalData < 20
+                ? 50
+                : item.totalData >= 20
+                ? 100
+                : item.totalData > 150
+                ? 150
+                : item.totalData;
+
+            const circle = L.circle(
+              [item.center.latitude, item.center.longitude],
+              {
+                radius: radius,
+                stroke: false,
+                fillOpacity: 0,
+              }
+            );
+
+            const popupContent = `
+          <b>Summary</b><hr>
+          <b>Total Accidents:</b> ${item.totalData}<br>
+          <b>Barangay Street(s):</b><br> ${
+            item.barangayStreets.length > 0
+              ? item.barangayStreets.join(", ")
+              : "N/A"
+          }<br>
+          <b>Most recent recorded incident:</b><br> ${
+            item.latestDateCommitted
+              ? item.latestDateCommitted + " at " + item.latestTimeCommitted
+              : "N/A"
+          }<br>
+          <b>Common Vehicle Types Involved:</b><br> (${
+            item.topTypeOfVehicles.length > 0
+              ? item.topTypeOfVehicles.join("), (")
+              : "N/A"
+          })<br>
+          <b>Common Vehicle Models Involved:</b><br> (${
+            item.topVehicleModels.length > 0
+              ? item.topVehicleModels.join("), (")
+              : "N/A"
+          })<br><br>
+        `;
+
+            circle.bindPopup(popupContent);
+
+            circle.on("mouseover", function (e) {
+              this.openPopup();
+            });
+
+            circle.on("mouseout", function (e) {
+              this.closePopup();
+            });
+
+            return circle;
+          })
+      : [];
+
+    const heatmapData = data
+      .filter(
+        (item) =>
+          isValidCoordinate(item.latitude) && isValidCoordinate(item.longitude)
+      )
+      .map((item) => [parseFloat(item.latitude), parseFloat(item.longitude)]);
 
     const heat = L.heatLayer(heatmapData, {
-      radius: 25,
+      radius: 15,
       gradient: {
         0.1: "blue",
         0.2: "cyan",
@@ -229,12 +191,6 @@ const MainMapPage = () => {
       },
     }).addTo(leafletMap);
 
-    // Show or hide markers based on showMarkers state
-    // if (showMarkers) {
-    //   markers.forEach((marker) => marker.addTo(leafletMap));
-    // }
-
-    // Add circles to the map
     circles.forEach((circle) => circle.addTo(leafletMap));
 
     leafletMap.addControl(new L.Control.Fullscreen());
@@ -246,17 +202,9 @@ const MainMapPage = () => {
     };
   }, []);
 
-  // Function to toggle marker visibility
-  // const toggleMarkers = () => {
-  //   setShowMarkers(!showMarkers);
-  //   markersRef.current.forEach((marker) => {
-  //     if (showMarkers) {
-  //       map.removeLayer(marker);
-  //     } else {
-  //       marker.addTo(map);
-  //     }
-  //   });
-  // };
+  function isValidCoordinate(coord) {
+    return typeof coord === "number" && !isNaN(coord);
+  }
 
   return (
     <div className="main-container">

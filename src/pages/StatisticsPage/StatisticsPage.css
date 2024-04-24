@@ -28,3 +28,7 @@
   padding: 0 1rem; /* Add padding to match the rest of the container */
   position: fixed;
 }
+
+.chart-canvas {
+  margin: 1rem;
+}

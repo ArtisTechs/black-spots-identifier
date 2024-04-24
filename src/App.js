@@ -6,6 +6,8 @@ import {
   Navigate,
 } from "react-router-dom";
 import "./App.css";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { NavBar } from "./components/NavBar/NavBar";
 import SideMenu from "./components/SideMenu/SideMenu";
 import MainMapPage from "./pages/MainMapPage/MainMapPage";
@@ -19,6 +21,7 @@ function App() {
   return (
     <Router>
       <div className="app">
+        <ToastContainer />
         {isLoading && (
           <div className="loading-page">
             <Loader />
