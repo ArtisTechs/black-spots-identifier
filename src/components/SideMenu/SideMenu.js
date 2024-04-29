@@ -6,6 +6,7 @@ import {
   faArrowUpFromBracket,
   faBars,
   faChartBar,
+  faChartColumn,
   faLocationDot,
 } from "@fortawesome/free-solid-svg-icons";
 import "./SideMenu.css";
@@ -65,7 +66,7 @@ const SideMenu = () => {
             className={selectedItem === "statistics" ? "active" : ""}
             onClick={() => handleItemClick("statistics")}
           >
-            <FontAwesomeIcon className="label-icon" icon={faChartBar} />
+            <FontAwesomeIcon className="label-icon" icon={faChartColumn} />
             {!isMinimized && "Accident Statistics"}
           </Link>
         </li>

@@ -14,9 +14,9 @@
     const [selectedYear, setSelectedYear] = useState(
       localStorage.getItem("selectedYearMap") || "All Years"
     );
-    const [showStrokes, setShowStrokes] = useState(
-      localStorage.getItem("showStrokesMap") || false
-    );
+    // const [showStrokes, setShowStrokes] = useState(
+    //   localStorage.getItem("showStrokesMap") || false
+    // );
     const mapContainerRef = useRef(null);
     const [data, setData] = useState([]);
     const [filteredDataByYear, setFilteredDataByYear] = useState({});
@@ -29,7 +29,7 @@
         13
       );
 
-      const uploadedData = localStorage.getItem("uploadedExcelData");
+      const uploadedData = localStorage.getItem("uploadedExcelDataForMap");
       const data = uploadedData ? JSON.parse(uploadedData) : [];
       setData(data);
 
@@ -64,10 +64,10 @@
 
     useEffect(() => {
       if (map) {
-        localStorage.setItem("showStrokesMap", showStrokes);
+        // localStorage.setItem("showStrokesMap", showStrokes);
         setupMapLayers(map, displayedData);
       }
-    }, [map, displayedData, showStrokes]); // Include showStrokes in the dependencies array
+    }, [map, displayedData]); // Include showStrokes in the dependencies array
 
     useEffect(() => {
       localStorage.setItem("selectedYearMap", selectedYear);
@@ -201,7 +201,7 @@
                 [item.center.latitude, item.center.longitude],
                 {
                   radius: 250,
-                  stroke: showStrokes, // Use the state to control visibility
+                  stroke: false, // Use the state to control visibility
                   fillOpacity: 0,
                 }
               );
@@ -300,12 +300,12 @@
               </div>
             </div>
           </div>
-          <button
+          {/* <button
             onClick={() => setShowStrokes((prev) => !prev)}
             className="show-circles-button"
           >
             <FontAwesomeIcon icon={showStrokes ? faCircleXmark : faCircle} />
-          </button>
+          </button> */}
         </div>
       </div>
     );

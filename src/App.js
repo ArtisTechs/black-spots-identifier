@@ -14,6 +14,7 @@ import MainMapPage from "./pages/MainMapPage/MainMapPage";
 import StatisticsPage from "./pages/StatisticsPage/StatisticsPage";
 import FileUploadPage from "./pages/FileUploadPage/FileUplaodPage";
 import Loader from "./components/Loader/Loader";
+import PointStatisticsPage from "./pages/PointStatisticsPage/PointStatisticsPage";
 
 function App() {
   const [isLoading, setIsLoading] = useState(false);

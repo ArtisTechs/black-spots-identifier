@@ -56,9 +56,13 @@ const DragAndDrop = ({ dataType, goBack, onFileUpload }) => {
           <FontAwesomeIcon className="back-button-icon" icon={faAngleLeft} />
         </button>
         {dataType === "map" ? (
-          <h1>Please upload a file in Excel format containing the data.</h1>
+          <h1>
+            Please upload an Excel file containing the data for Map.
+          </h1>
         ) : (
-          <h1>Upload an Excel file containing the data for Statistics.</h1>
+          <h1>
+            Please upload an Excel file containing the data for Statistics.
+          </h1>
         )}
       </div>
       <div {...getRootProps()} className="drag-and-drop-space">

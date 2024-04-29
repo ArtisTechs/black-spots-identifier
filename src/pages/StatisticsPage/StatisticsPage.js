@@ -1,5 +1,3 @@
-/* global Chart */
-
 import React, { useEffect, useRef, useState } from "react";
 import Chart from "chart.js/auto";
 import { BarController, CategoryScale, LinearScale, Title } from "chart.js";
@@ -8,6 +6,7 @@ import * as geolib from "geolib";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAngleLeft, faStreetView } from "@fortawesome/free-solid-svg-icons";
 import { faCircleDot } from "@fortawesome/free-regular-svg-icons";
+import PointStatisticsPage from "../PointStatisticsPage/PointStatisticsPage";
 
 Chart.register(BarController, CategoryScale, LinearScale, Title);
 
@@ -27,6 +26,8 @@ const StatisticsPage = () => {
 
   const goBack = () => {
     setViewType(null);
+    localStorage.removeItem("selectedYearStat");
+    localStorage.removeItem("lastViewType");
   };
 
   useEffect(() => {
@@ -36,10 +37,14 @@ const StatisticsPage = () => {
 
     localStorage.setItem("lastViewType", viewType);
 
+    if (viewType === "pointStat") {
+      return;
+    }
+
     const ctx = chartContainerRef.current.getContext("2d");
     chartContextRef.current = ctx;
 
-    const uploadedData = localStorage.getItem("uploadedExcelData");
+    const uploadedData = localStorage.getItem("uploadedExcelDataForMap");
     const data = uploadedData ? JSON.parse(uploadedData) : [];
 
     setEarliestYear(
@@ -216,39 +221,49 @@ const StatisticsPage = () => {
               />
               <p>Per Barangay</p>
             </div>
-            <div className="card" onClick={() => setViewType("per500m")}>
+            {/* <div className="card" onClick={() => setViewType("per500m")}>
               <FontAwesomeIcon className="label-icon-card" icon={faCircleDot} />
               <p>Per 500m</p>
+            </div> */}
+            <div className="card" onClick={() => setViewType("pointStat")}>
+              <FontAwesomeIcon className="label-icon-card" icon={faCircleDot} />
+              <p>Per Point Statistics</p>
             </div>
           </div>
         </div>
       )}
       {viewType && (
-        <div className="stat-container">
-          <div className="header">
-            <button onClick={goBack} className="back-button">
-              <FontAwesomeIcon
-                className="back-button-icon"
-                icon={faAngleLeft}
-              />
-            </button>
-            <h3>
-              Number of accidents{" "}
-              {viewType === "barangay" ? "per Barangay" : "per 500m"}.
-            </h3>
-          </div>
-          <select
-            value={selectedYear}
-            onChange={(e) => setSelectedYear(e.target.value)}
-          >
-            {Object.keys(filteredDataByYear).map((year) => (
-              <option key={year} value={year}>
-                {year}
-              </option>
-            ))}
-          </select>
-          <canvas ref={chartContainerRef} className="chart-canvas"></canvas>
-        </div>
+        <>
+          {viewType === "pointStat" ? (
+            <PointStatisticsPage goBack={goBack} />
+          ) : (
+            <div className="stat-container">
+              <div className="header">
+                <button onClick={goBack} className="back-button">
+                  <FontAwesomeIcon
+                    className="back-button-icon"
+                    icon={faAngleLeft}
+                  />
+                </button>
+                <h3>
+                  Number of accidents{" "}
+                  {viewType === "barangay" ? "per Barangay" : "per 500m"}.
+                </h3>
+              </div>
+              <select
+                value={selectedYear}
+                onChange={(e) => setSelectedYear(e.target.value)}
+              >
+                {Object.keys(filteredDataByYear).map((year) => (
+                  <option key={year} value={year}>
+                    {year}
+                  </option>
+                ))}
+              </select>
+              <canvas ref={chartContainerRef} className="chart-canvas"></canvas>
+            </div>
+          )}
+        </>
       )}
     </div>
   );
