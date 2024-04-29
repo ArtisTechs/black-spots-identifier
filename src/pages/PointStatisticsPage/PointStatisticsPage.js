@@ -129,6 +129,12 @@ const PointStatisticsPage = ({ goBack }) => {
         indexAxis: "x",
         responsive: true,
         maintainAspectRatio: false,
+        plugins: {
+          tooltip: {
+            mode: "index",
+            intersect: false,
+          },
+        },
         scales: {
           x: {
             beginAtZero: true,
@@ -153,7 +159,7 @@ const PointStatisticsPage = ({ goBack }) => {
           <button onClick={goBack} className="back-button">
             <FontAwesomeIcon className="back-button-icon" icon={faAngleLeft} />
           </button>
-          <h3>Number of Accidents Per Point.</h3>
+          <h3>Number of accidents per Point.</h3>
         </div>
         <select
           value={selectedYear}

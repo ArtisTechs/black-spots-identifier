@@ -191,6 +191,12 @@ const StatisticsPage = () => {
         indexAxis: "x",
         responsive: true,
         maintainAspectRatio: false,
+        plugins: {
+          tooltip: {
+            mode: "index",
+            intersect: false,
+          },
+        },
         scales: {
           x: {
             beginAtZero: true,
